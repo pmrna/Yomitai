@@ -5,7 +5,7 @@ function MangaCard({ manga, onClick }: { manga: any; onClick: () => void }) {
         <figure>
           <div className="flex flex-col items-start justify-start ">
             <img
-              src={manga.images.jpg.image_url}
+              src={manga.images.webp.image_url}
               alt="Manga Covers"
               className="w-32 h-40 rounded-lg object-cover  hover:scale-105 transition-all duration-300"
             />
