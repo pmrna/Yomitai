@@ -36,6 +36,7 @@ function Home(props: HomeProps) {
         <Content
           selectedManga={props.selectedManga}
           recommendations={props.recommendations}
+          setSelectedManga={props.setSelectedManga}
         />
       ) : (
         <SearchBar

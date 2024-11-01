@@ -5,9 +5,8 @@ import useDebounce from "./hooks/debounce";
 import { MangaType } from "./types/types";
 
 function App() {
-  // bg: bg-gradient-to-b from-neutral-300 to-stone-400
   const [mangaList, setMangaList] = useState([]);
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommendations, setRecommendations] = useState<MangaType[]>([]);
   const [search, setSearch] = useState("");
   const [selectedManga, setSelectedManga] = useState<MangaType | null>(null);
 
@@ -19,39 +18,78 @@ function App() {
   };
 
   const FetchRecommendations = async (selectedManga: MangaType | null) => {
-    if (!selectedManga) return;
+    if (
+      !selectedManga ||
+      !selectedManga.genres ||
+      selectedManga.genres.length === 0
+    )
+      return;
+
+    function getGenres(selectedMangaGenres: any[], randomCount: number) {
+      const prominentGenre = selectedMangaGenres[0]?.mal_id || null;
+
+      const otherGenres = selectedMangaGenres
+        .slice(1)
+        .sort(() => 0.5 - Math.random());
+
+      const randomGenres = otherGenres
+        .slice(0, randomCount)
+        .map((genre) => genre.mal_id);
+
+      return [prominentGenre, ...randomGenres]
+        .filter((id) => id !== null)
+        .join(",");
+    }
+
+    // shuffle genres
+    // function getSimilarGenres(selectedMangaGenres: any[], count: number) {
+    //   const shuffledGenres = selectedMangaGenres.sort(
+    //     () => 0.5 - Math.random()
+    //   );
+    //   return shuffledGenres
+    //     .slice(0, count)
+    //     .map((genre) => genre.mal_id)
+    //     .join(",");
+    // }
 
     try {
-      // Fetch the full details of the selected manga to get its genres
-      const fullResponse = await fetch(
-        `https://api.jikan.moe/v4/manga/${selectedManga.mal_id}/full`
+      const genreIDs = getGenres(selectedManga.genres, 2);
+
+      const recommendationsGenreResponse = await fetch(
+        `https://api.jikan.moe/v4/manga?genres=${genreIDs}&sfw=true`
       );
-      const fullData = await fullResponse.json();
+      const genreRecommendationsData =
+        await recommendationsGenreResponse.json();
+      const genreRecommendations = genreRecommendationsData.data || [];
 
-      // Extract genre IDs from the selected manga
-      const genreIDs = fullData.data.genres
-        .map((genre: any) => genre.mal_id)
-        .join(",");
-      console.log("Selected manga genre IDs:", genreIDs);
-
-      // Fetch manga based on the selected manga's genres
-      const recommendationsResponse = await fetch(
-        `https://api.jikan.moe/v4/manga?genres=${genreIDs}`
+      let combinedRecommendations = genreRecommendations.filter(
+        (manga: MangaType) => manga.mal_id !== selectedManga.mal_id
       );
-      const recommendationsData = await recommendationsResponse.json();
 
-      console.log("Raw recommendations:", recommendationsData.data);
+      if (genreRecommendations.length < 10) {
+        const recommendationsMangaResponse = await fetch(
+          `https://api.jikan.moe/v4/manga/${selectedManga.mal_id}/recommendations`
+        );
+        const userRecommendationsData =
+          await recommendationsMangaResponse.json();
+        const userRecommendations = userRecommendationsData.data || [];
 
-      // Optionally, you can limit the number of recommendations
-      const limitedRecommendations = recommendationsData.data.slice(0, 20);
+        const uniqueRecommendations = new Map();
+        [...genreRecommendations, ...userRecommendations].forEach(
+          (recommendation: any) => {
+            uniqueRecommendations.set(recommendation.mal_id, recommendation);
+          }
+        );
 
-      console.log(
-        "Filtered recommendations (limited):",
-        limitedRecommendations
-      );
-      setRecommendations(limitedRecommendations);
+        combinedRecommendations = Array.from(
+          uniqueRecommendations.values()
+        ).filter((manga: MangaType) => manga.mal_id !== selectedManga.mal_id);
+      }
+
+      setRecommendations(combinedRecommendations);
     } catch (error) {
       console.error("Error fetching recommendations:", error);
+      setRecommendations([]);
     }
   };
 

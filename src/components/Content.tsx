@@ -1,60 +1,51 @@
 import React from "react";
 import { ContentProps } from "../types/types";
+import RecommendationList from "./RecommendationList";
 
 const Content: React.FC<ContentProps> = ({
   selectedManga,
   recommendations,
+  setSelectedManga,
 }) => {
   return (
-    <div className="flex flex-row items-center justify-center gap-10">
+    <div className="flex flex-row items-start justify-center gap-10 font-inter w-screen">
       <div>
         {selectedManga && (
           <>
-            <img
-              src={selectedManga.images.webp.image_url}
-              alt={selectedManga.title}
-            />
-            <h2 className="flex items-center justify-center font-medium text-xl">
+            <div className="mb-4">
+              <img
+                src={selectedManga.images.webp.image_url}
+                alt={selectedManga.title}
+                className="rounded-xl object-contain w-full h-auto"
+              />
+            </div>
+            <h2 className="text-center font-medium text-xl mb-3">
               {selectedManga.title}
             </h2>
           </>
         )}
       </div>
+
       <div className="w-full max-w-[40%]">
         <h2 className="font-bold text-xl mb-2">Synopsis</h2>
-        <div className="space-y-5">
+        <div className="space-y-5 mb-5">
           {selectedManga && (
             <>
-              <p className="text-base text-start break-words leading-relaxed tracking-tighter">
-                {selectedManga.synopsis}
+              <p className="text-base leading-relaxed tracking-normal break-words">
+                {selectedManga.synopsis || "No synopsis available"}
               </p>
-              <p className="text-sm text-start font-medium italic">
+              <p className="text-sm font-medium italic text-gray-600">
                 {selectedManga.genres.map((genre) => genre.name).join(", ")}
               </p>
             </>
           )}
         </div>
-        // TODO: Add a function when clicking a manga from recommended.
-        <h2 className="font-bold text-xl mt-5 mb-2">Recommended Manga</h2>
-        <div className="w-full">
-          <div className="flex overflow-x-auto gap-7 no-scrollbar">
-            {recommendations.map((recommendation) => (
-              <div
-                key={recommendation.mal_id}
-                className="flex flex-col items-center"
-              >
-                <img
-                  src={recommendation.images.webp.large_image_url}
-                  alt={recommendation.title}
-                  className="w-12 h-20 rounded-lg object-cover hover:scale-105 transition-all duration-300"
-                />
-                <p className="text-start text-sm leading-none tracking-tighter">
-                  {recommendation.title}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+
+        <h2 className="font-bold text-xl mb-2">Recommended Manga</h2>
+        <RecommendationList
+          recommendations={recommendations}
+          onClick={setSelectedManga}
+        />
       </div>
     </div>
   );

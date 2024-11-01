@@ -18,13 +18,13 @@ export type MangaType = {
   images: {
     jpg: {
       image_url: string;
-      small_image_url: string;
       large_image_url: string;
+      small_image_url: string;
     };
     webp: {
       image_url: string;
-      small_image_url: string;
       large_image_url: string;
+      small_image_url: string;
     };
   };
 };
@@ -45,4 +45,10 @@ export interface SearchBarProps {
 export interface ContentProps {
   selectedManga: MangaType | null;
   recommendations: any[];
+  setSelectedManga: (manga: MangaType | null) => void;
+}
+
+export interface RecommendationListProps {
+  recommendations: MangaType[];
+  onClick: (manga: MangaType) => void;
 }
