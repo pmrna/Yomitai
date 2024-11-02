@@ -5,7 +5,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
   onClick,
 }) => {
   return (
-    <div className="flex overflow-x-auto gap-4">
+    <div className="flex overflow-x-auto gap-10 p-3">
       {recommendations.map((recommendation: any) => {
         const isUserRecommendation = recommendation.entry !== undefined;
         const mangaData = isUserRecommendation

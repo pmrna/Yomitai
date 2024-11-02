@@ -15,7 +15,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   return (
     <>
-      <div className="max-w-full w-[40%]">
+      <div className="w-full max-w-[56.25rem]">
         <form onSubmit={HandleSearch}>
           <div className="relative">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -32,20 +32,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
             focus:ring-gray-500 focus:border-gray-500 focus:outline-none text-gray-800 placeholder-gray-500 
             focus:bg-gray-900 focus:text-white placeholder:placeholder-gray-500"
             />
-            <button
-              type="submit"
-              className="text-white absolute end-2.5 bottom-2.5 bg-gray-700 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-4 py-2 "
-            >
-              Search
-            </button>
           </div>
         </form>
       </div>
       <div
-        className={`mt-2 px-2 grid grid-cols-4 max-w-[70%] gap-x-10 overflow-y-auto transition-all duration-500 ease-in-out ${
+        className={`grid grid-cols-4 max-w-[56.25rem] w-full justify-items-center bg-gray-100 rounded-b-lg border border-gray-50 shadow-sm overflow-y-auto scrollbar-thin transition-all duration-200 ease-in-out  ${
           isAnimating
             ? visible
-              ? "max-h-[2000px] opacity-100"
+              ? "max-h-[125rem] opacity-100 p-5 gap-y-2"
               : "max-h-0 opacity-0"
             : "opacity-0"
         }`}

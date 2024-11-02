@@ -3,11 +3,11 @@ function MangaCard({ manga, onClick }: { manga: any; onClick: () => void }) {
     <article onClick={onClick} className="cursor-pointer">
       <a target="_blank">
         <figure>
-          <div className="flex flex-col items-start justify-start ">
+          <div className="w-32 h-full">
             <img
               src={manga.images.webp.image_url}
               alt="Manga Covers"
-              className="w-32 h-40 rounded-lg object-cover  hover:scale-105 transition-all duration-300"
+              className="w-full h-50 rounded-lg object-contain hover:scale-105 transition-all duration-300"
             />
             <h3 className="my-1 block w-full max-w-36 break-words leading-snug tracking-tight text-pretty text-sm font-medium">
               {manga.title}

@@ -96,7 +96,7 @@ function App() {
   const FetchManga = async (query: string) => {
     try {
       const temp = await fetch(
-        `https://api.jikan.moe/v4/manga?q=${query}&sfw=true&order_by=title&sort=asc&limit=20`
+        `https://api.jikan.moe/v4/manga?q=${query}&sfw=true&order_by=title&sort=asc&limit=25`
       ).then((res) => res.json());
 
       setMangaList(temp.data);

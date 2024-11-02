@@ -31,7 +31,7 @@ function Home(props: HomeProps) {
   }, [props.search]);
 
   return (
-    <main className="py-10 flex flex-col items-center justify-center h-[42rem] overflow-hidden">
+    <main className="py-10 flex flex-col items-center justify-center h-[45rem] overflow-hidden">
       {props.selectedManga ? (
         <Content
           selectedManga={props.selectedManga}
